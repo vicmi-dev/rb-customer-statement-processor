@@ -54,14 +54,12 @@ public class FilesController {
 		String message = "";
 		Map<String, Object> response = new HashMap<>();
 		List<List<Transaction>> allTransactions = new ArrayList<List<Transaction>>();
-		List<Transaction> uploadedTransactions = new ArrayList<Transaction>();
 		for (MultipartFile file : files) {
 			// If file is CSV:
 			if (file.getContentType().equals("text/csv")) {
 				try {
 					// Get list of all transactions:
 					allTransactions = csvToTransactions(file.getInputStream());
-					uploadedTransactions.addAll(allTransactions.get(3));
 					
 					// Get the response
 					response = getResponse(allTransactions, file, response);
@@ -99,7 +97,6 @@ public class FilesController {
 
 					// Validating and getting the list of transactions needed
 					allTransactions = transactionsValidation(rawTransactions);
-					uploadedTransactions.addAll(allTransactions.get(3));
 
 					// Get the response
 					response = getResponse(allTransactions, file, response);
@@ -112,8 +109,7 @@ public class FilesController {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
 			}
 		}
-		// Saving the list of transactions from the files to the database
-		repository.saveAll(uploadedTransactions);
+
 		try {
 			ResponseEntity responseEntity = new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 			return responseEntity;
@@ -216,7 +212,7 @@ public class FilesController {
 			// Adding current transaction to transactions List
 			transactions.add(transaction);
 		}
-
+		
 		// Iterate over the transactions from the file and check duplicates against the
 		// database
 		List<Transaction> duplicatesListInDb = new ArrayList<Transaction>();
@@ -238,8 +234,8 @@ public class FilesController {
 			}
 		}
 		
-		// Adding the List duplicatedTransactions, the transactions with balance
-		// error and rawTransactions to the List of allTransactions that is returned
+		// Adding the List duplicatedTransactions and the transactions with balance
+		// error to the List of allTransactions that is returned
 		allTransactions.add(duplicatedTransactions);
 		allTransactions.add(duplicatesListInDb);
 		allTransactions.add(transactionsBalanceError);
@@ -253,6 +249,10 @@ public class FilesController {
 			}
 		}
 
+		
+		// Saving the list of transactions from the file to the database
+		repository.saveAll(rawTransactions);
+		
 		return allTransactions;
 	}
 
