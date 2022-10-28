@@ -1,5 +1,6 @@
 package com.manuel.rb.models.entity;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -10,11 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttachmentRef;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 @Entity
 @Table(name = "transactions")
@@ -27,20 +24,20 @@ public class Transaction {
 	private long id;
 	
 	@XmlAttribute(name = "reference")
-	private Long referenceNumb;
+	private Long reference;
 	private String accountNumber;
-	private double startBalance;
-	private double mutation;
+	private BigDecimal startBalance;
+	private BigDecimal mutation;
 	private String description;
-	private double endBalance;
+	private BigDecimal endBalance;
 
 	
-	public Long getReferenceNumb() {
-		return referenceNumb;
+	public Long getReference() {
+		return reference;
 	}
 
-	public void setReferenceNumb(Long referenceNumb) {
-		this.referenceNumb = referenceNumb;
+	public void setReference(Long reference) {
+		this.reference = reference;
 	}
 
 	public String getAccountNumber() {
@@ -51,19 +48,19 @@ public class Transaction {
 		this.accountNumber = accountNumber;
 	}
 
-	public double getStartBalance() {
+	public BigDecimal getStartBalance() {
 		return startBalance;
 	}
 
-	public void setStartBalance(double startBalance) {
+	public void setStartBalance(BigDecimal startBalance) {
 		this.startBalance = startBalance;
 	}
 
-	public double getMutation() {
+	public BigDecimal getMutation() {
 		return mutation;
 	}
 
-	public void setMutation(double mutation) {
+	public void setMutation(BigDecimal mutation) {
 		this.mutation = mutation;
 	}
 
@@ -75,18 +72,18 @@ public class Transaction {
 		this.description = description;
 	}
 
-	public double getEndBalance() {
+	public BigDecimal getEndBalance() {
 		return endBalance;
 	}
 
-	public void setEndBalance(double endBalance) {
+	public void setEndBalance(BigDecimal endBalance) {
 		this.endBalance = endBalance;
 	}
 
 	
-	public Transaction(Long referenceNumb, String accountNumber, double startBalance, double mutation, String description,
-			double endBalance) {
-		this.referenceNumb = referenceNumb;
+	public Transaction(Long reference, String accountNumber, BigDecimal startBalance, BigDecimal mutation, String description,
+			BigDecimal endBalance) {
+		this.reference = reference;
 		this.accountNumber = accountNumber;
 		this.startBalance = startBalance;
 		this.mutation = mutation;
@@ -106,11 +103,11 @@ public class Transaction {
 			return false;
 
 		Transaction that = (Transaction) obj;
-		return Objects.equals(referenceNumb, that.referenceNumb);
+		return Objects.equals(reference, that.reference);
 	}
 
 	@Override
 	public int hashCode() {
-		return referenceNumb != null ? referenceNumb.hashCode() : 0;
+		return reference != null ? reference.hashCode() : 0;
 	}
 }
