@@ -7,3 +7,5 @@ It will also validate within each transaction whether the end balance matches th
 
 To test it, just clone the project, run it and test it on Postman attaching the files in form-data format, in the body of a POST request to the API http://localhost:8080/api/upload
 The key being "files" and the value the file itself.
+
+The response will be JSON objects including the transactions with duplicated reference numbers and balance error.
