@@ -1,4 +1,4 @@
-package com.manuel.rb.controller;
+package com.manuel.rb.services;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;

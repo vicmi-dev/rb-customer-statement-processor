@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "transactions")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -21,14 +23,19 @@ public class Transaction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", nullable = false)
+	@JsonIgnore
 	private long id;
 	
 	@XmlAttribute(name = "reference")
 	private Long reference;
+	@JsonIgnore
 	private String accountNumber;
+	@JsonIgnore
 	private BigDecimal startBalance;
+	@JsonIgnore
 	private BigDecimal mutation;
 	private String description;
+	@JsonIgnore
 	private BigDecimal endBalance;
 
 	
