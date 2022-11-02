@@ -5,7 +5,7 @@
     It will validate whether the records include duplicated reference number, within the same file and against the historical data from the DB.
     It will also validate within each transaction whether the end balance matches the difference between the start balance and the mutation.
 
-### Assignment ###
+	## Assignment
 
 	A bank receives monthly deliveries of customer statement records. This information is delivered in two formats, CSV and XML. These records need to be validated based on the following conditions:
 
@@ -13,13 +13,13 @@
      * End balance needs to be validated 
      * Return a report with reference number and description of each of the failed transactions
     
-     ## Quick Start
+	## Quick Start
 
  * Clone this repository
  * Run `mvn clean package`
  * Run `mvn spring-boot:run`
  
-     ##### Alternative
+	## Alternative
 
  * Import the project in your favourite IDE
  * Run the file `src\main\java\com\manuel\rb\RbCustomerStatementProcessorApplication.java"`
