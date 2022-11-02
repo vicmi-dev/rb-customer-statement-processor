@@ -1,9 +1,10 @@
 # rb-customer-statement-processor
 
    
-    Spring Boot project which allows user to upload CSV and XML files with the predefined data format. 
-    It will validate whether the records include duplicated reference number, within the same file and against the historical data from the DB.
-    It will also validate within each transaction whether the end balance matches the difference between the start balance and the mutation.
+Spring Boot project which allows user to upload CSV and XML files with the predefined data format. 
+
+    * It will validate whether the records include duplicated reference number, within the same file and against the historical data from the DB.
+    * It will also validate within each transaction whether the end balance matches the difference between the start balance and the mutation.
 
 ## Assignment
 
@@ -22,7 +23,7 @@
 ## Alternative
 
  * Import the project in your favourite IDE
- * Run the file `src\main\java\com\manuel\rb\RbCustomerStatementProcessorApplication.java"`
+ * Run the file `"src\main\java\com\manuel\rb\RbCustomerStatementProcessorApplication.java"`
  
  ## Quick run
  
