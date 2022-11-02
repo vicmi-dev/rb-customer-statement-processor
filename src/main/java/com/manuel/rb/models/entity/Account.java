@@ -24,6 +24,14 @@ public class Account {
     @JoinColumn(name="accountNumber")  
 	private List<Transaction> transactions;
 
+	public Account(String iban, BigDecimal startBalance) {
+		this.iban = iban;
+		this.balance = startBalance;
+	}
+
+	public Account() {
+	}
+	
 	public String getIban() {
 		return iban;
 	}
@@ -47,15 +55,4 @@ public class Account {
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
-
-	public Account(String iban, BigDecimal startBalance) {
-		this.iban = iban;
-		this.balance = startBalance;
-	}
-
-	public Account() {
-	}
-	
-
-
 }

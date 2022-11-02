@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.manuel.rb.response.ResponseMessage;
-import com.manuel.rb.services.FilesServices;
+import com.manuel.rb.services.FileService;
 
 @Controller
 @RequestMapping("/api")
 public class FilesController {
 
 	@Autowired
-	FilesServices fileService;
+	FileService fileService;
 	
 	@PostMapping("/upload")
 	public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("files") MultipartFile[] files){

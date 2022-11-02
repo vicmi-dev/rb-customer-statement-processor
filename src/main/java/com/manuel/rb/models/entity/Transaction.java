@@ -38,6 +38,21 @@ public class Transaction {
 	@JsonIgnore
 	private BigDecimal endBalance;
 
+
+	
+	public Transaction(Long reference, String accountNumber, BigDecimal startBalance, BigDecimal mutation, String description,
+			BigDecimal endBalance) {
+		this.reference = reference;
+		this.accountNumber = accountNumber;
+		this.startBalance = startBalance;
+		this.mutation = mutation;
+		this.description = description;
+		this.endBalance = endBalance;
+	}
+
+	
+	public Transaction() {
+	}
 	
 	public Long getReference() {
 		return reference;
@@ -87,20 +102,6 @@ public class Transaction {
 		this.endBalance = endBalance;
 	}
 
-	
-	public Transaction(Long reference, String accountNumber, BigDecimal startBalance, BigDecimal mutation, String description,
-			BigDecimal endBalance) {
-		this.reference = reference;
-		this.accountNumber = accountNumber;
-		this.startBalance = startBalance;
-		this.mutation = mutation;
-		this.description = description;
-		this.endBalance = endBalance;
-	}
-
-	
-	public Transaction() {
-	}
 
 	@Override
 	public boolean equals(final Object obj) {

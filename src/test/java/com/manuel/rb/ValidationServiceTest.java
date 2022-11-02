@@ -22,13 +22,13 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.manuel.rb.models.entity.Transaction;
-import com.manuel.rb.services.FilesServices;
+import com.manuel.rb.services.ValidationService;
 
 @SpringBootTest
-public class FileServicesTest {
+public class ValidationServiceTest {
 
 	@Autowired
-	FilesServices fileService;
+	ValidationService validationService;
 
 	Transaction transaction = new Transaction();
 	Transaction transaction2 = new Transaction();
@@ -63,38 +63,17 @@ public class FileServicesTest {
 		transactions.add(transaction3);
 	}
 
-	@Test
-	void csvToTransactionsTest() throws FileNotFoundException {
-		File file = new File("src/test/resources/records.csv");
-		FileInputStream inputFile = new FileInputStream(file);
-
-		List<Transaction> rawTransactions = fileService.csvToTransactions(inputFile);
-
-		assertFalse(rawTransactions.isEmpty());
-	}
-
-	@Test
-	void xmlToTransactionsTest() throws IOException, IllegalStateException, JAXBException {
-		File file = new File("src/test/resources/records.xml");
-		FileInputStream input = new FileInputStream(file);
-		MultipartFile multipartFile = new MockMultipartFile("files", file.getName(), "text/csv",
-				IOUtils.toByteArray(input));
-
-		List<Transaction> rawTransactions = fileService.xmlToTransactions(multipartFile);
-
-		assertFalse(rawTransactions.isEmpty());
-	}
 
 	@Test
 	void findDuplicatedTransactionsInListTest() {
-		List<Transaction> duplicatedTransactions = fileService.findDuplicatedTransactionsInList(transactions);
+		List<Transaction> duplicatedTransactions = validationService.findDuplicatedTransactionsInList(transactions);
 
 		assertEquals(2, duplicatedTransactions.size());
 	}
 
 	@Test
 	void validateBalanceTest() {
-		List<Transaction> transactionsBalanceError = fileService.validateBalance(transactions);
+		List<Transaction> transactionsBalanceError = validationService.validateBalance(transactions);
 
 		transactionsBalanceError.forEach(transaction ->
 		assertFalse(transaction.getStartBalance().add(transaction.getMutation())

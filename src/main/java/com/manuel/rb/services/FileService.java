@@ -33,17 +33,18 @@ import com.manuel.rb.models.entity.Transaction;
 import com.manuel.rb.repository.AccountRepository;
 import com.manuel.rb.repository.TransactionRepository;
 import com.manuel.rb.response.ResponseMessage;
+import com.manuel.rb.services.ValidationService;
 
 @Service
-public class FilesServices {
+public class FileService {
 	@Autowired
-	AccountRepository accountRepository;
+	ValidationService validationService;
 
-	@Autowired
-	TransactionRepository repository;
+//	@Autowired
+//	TransactionRepository transactionRepository;
 
-	@Autowired
-	private HttpServletRequest request;
+//	@Autowired
+//	private HttpServletRequest request;
 
 	// File processing
 	public ResponseEntity<ResponseMessage> fileProcessing(MultipartFile[] files) {
@@ -76,7 +77,7 @@ public class FilesServices {
 					message = "Please upload a csv/xml file!";
 					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
 				}
-				allTransactions = transactionsValidation(rawTransactions);
+				allTransactions = validationService.transactionsValidation(rawTransactions);
 
 				// Get the response
 				response = getResponse(allTransactions, file, response);
@@ -139,104 +140,104 @@ public class FilesServices {
 		return rawTransactions;
 	}
 
-	public List<Transaction> validateBalance(List<Transaction> rawTransactions) {
-		List<Transaction> transactionsBalanceError = new ArrayList<>();
-
-		// Check balance of the transaction and if there are errors, adding them to a
-		// List
-		rawTransactions.stream()
-				.filter(transaction -> !transaction.getStartBalance().add(transaction.getMutation())
-						.equals(transaction.getEndBalance()))
-				.forEach(transaction -> transactionsBalanceError.add(transaction));
-
-		return transactionsBalanceError;
-	}
-
-	public List<Transaction> findDuplicatedTransactionsInList(List<Transaction> rawTransactions) {
-		List<Transaction> duplicatedTransactions = new ArrayList<>();
-		List<Transaction> transactions = new ArrayList<>();
-		// Iterate over the transactions to find duplicates in current batch
-		for (Transaction transaction : rawTransactions) {
-			for (Transaction transactionItem : transactions) {
-				if (transactionItem.equals(transaction)) {
-					// Checking whether the item in the current List of transactions is in
-					// duplicatedTransactions
-					if (!duplicatedTransactions.contains(transactionItem)) {
-						duplicatedTransactions.add(transactionItem);
-					}
-					// Adding current transactions to duplicated List
-					duplicatedTransactions.add(transaction);
-					break;
-				}
-			}
-			// Adding current transaction to transactions List
-			transactions.add(transaction);
-		}
-
-		return duplicatedTransactions;
-	}
-
-	public List<Transaction> findDuplicatedTransactionsInDB(List<Transaction> rawTransactions) {
-		List<Transaction> duplicatesAgainstDb = new ArrayList<>();
-		// Iterate over the transactions from the file and check duplicates against the
-		// database
-
-		rawTransactions.forEach(rawTransaction -> {
-			List<Transaction> duplicatedTransactionsInDb = getTransactionsByReference(rawTransaction.getReference());
-
-			// If the reference number is duplicated, we add the transaction to the list of
-			// duplicates
-			if (!duplicatedTransactionsInDb.isEmpty()) {
-				duplicatesAgainstDb.add(rawTransaction);
-				duplicatedTransactionsInDb.stream().filter(t -> !duplicatesAgainstDb.contains(t))
-						.forEach(t -> duplicatesAgainstDb.add(t));
-			}
-		});
-
-		return duplicatesAgainstDb;
-	}
-
-	// Validation of transactions
-	// Checking unique reference and balance
-	// Saving to the DB
-	public List<List<Transaction>> transactionsValidation(List<Transaction> rawTransactions) {
-		List<Transaction> duplicatedTransactionsInFile = findDuplicatedTransactionsInList(rawTransactions);
-		List<Transaction> transactionsBalanceError = validateBalance(rawTransactions);
-		List<Transaction> duplicatedTransactionsInDb = findDuplicatedTransactionsInDB(rawTransactions);
-
-		List<List<Transaction>> allTransactions = new ArrayList<>();
-		// Adding the List duplicatedTransactions and the transactions with balance
-		// error to the List of allTransactions that is returned
-		allTransactions.add(duplicatedTransactionsInFile);
-		allTransactions.add(duplicatedTransactionsInDb);
-		allTransactions.add(transactionsBalanceError);
-		allTransactions.add(rawTransactions);
-
-		//If necessary create new accounts
-		createNewAccounts(rawTransactions);
-
-		// Saving the list of transactions from the file to the database
-		repository.saveAll(rawTransactions);
-
-		return allTransactions;
-	}
-
-	public void createNewAccounts(List<Transaction> rawTransactions) {
-		// Creating Account based on IBAN if it does not exist already
-		rawTransactions.stream().filter(t -> accountRepository.findByIban(t.getAccountNumber()) == null)
-				.forEach(transaction -> {
-					Account newAccount = new Account(transaction.getAccountNumber(), transaction.getEndBalance());
-					accountRepository.save(newAccount);
-				});
-	}
-
-	// Get repeated transactions from the database
-	public List<Transaction> getTransactionsByReference(Long reference) {
-		List<Transaction> duplicatesList = null;
-		duplicatesList = repository.findByReference(reference);
-		duplicatesList.addAll(repository.findByReference(reference));
-		return duplicatesList;
-	}
+//	public List<Transaction> validateBalance(List<Transaction> rawTransactions) {
+//		List<Transaction> transactionsBalanceError = new ArrayList<>();
+//
+//		// Check balance of the transaction and if there are errors, adding them to a
+//		// List
+//		rawTransactions.stream()
+//				.filter(transaction -> !transaction.getStartBalance().add(transaction.getMutation())
+//						.equals(transaction.getEndBalance()))
+//				.forEach(transaction -> transactionsBalanceError.add(transaction));
+//
+//		return transactionsBalanceError;
+//	}
+//
+//	public List<Transaction> findDuplicatedTransactionsInList(List<Transaction> rawTransactions) {
+//		List<Transaction> duplicatedTransactions = new ArrayList<>();
+//		List<Transaction> transactions = new ArrayList<>();
+//		// Iterate over the transactions to find duplicates in current batch
+//		for (Transaction transaction : rawTransactions) {
+//			for (Transaction transactionItem : transactions) {
+//				if (transactionItem.equals(transaction)) {
+//					// Checking whether the item in the current List of transactions is in
+//					// duplicatedTransactions
+//					if (!duplicatedTransactions.contains(transactionItem)) {
+//						duplicatedTransactions.add(transactionItem);
+//					}
+//					// Adding current transactions to duplicated List
+//					duplicatedTransactions.add(transaction);
+//					break;
+//				}
+//			}
+//			// Adding current transaction to transactions List
+//			transactions.add(transaction);
+//		}
+//
+//		return duplicatedTransactions;
+//	}
+//
+//	public List<Transaction> findDuplicatedTransactionsInDB(List<Transaction> rawTransactions) {
+//		List<Transaction> duplicatesAgainstDb = new ArrayList<>();
+//		// Iterate over the transactions from the file and check duplicates against the
+//		// database
+//
+//		rawTransactions.forEach(rawTransaction -> {
+//			List<Transaction> duplicatedTransactionsInDb = getTransactionsByReference(rawTransaction.getReference());
+//
+//			// If the reference number is duplicated, we add the transaction to the list of
+//			// duplicates
+//			if (!duplicatedTransactionsInDb.isEmpty()) {
+//				duplicatesAgainstDb.add(rawTransaction);
+//				duplicatedTransactionsInDb.stream().filter(t -> !duplicatesAgainstDb.contains(t))
+//						.forEach(t -> duplicatesAgainstDb.add(t));
+//			}
+//		});
+//
+//		return duplicatesAgainstDb;
+//	}
+//
+//	// Validation of transactions
+//	// Checking unique reference and balance
+//	// Saving to the DB
+//	public List<List<Transaction>> transactionsValidation(List<Transaction> rawTransactions) {
+//		List<Transaction> duplicatedTransactionsInFile = findDuplicatedTransactionsInList(rawTransactions);
+//		List<Transaction> transactionsBalanceError = validateBalance(rawTransactions);
+//		List<Transaction> duplicatedTransactionsInDb = findDuplicatedTransactionsInDB(rawTransactions);
+//
+//		List<List<Transaction>> allTransactions = new ArrayList<>();
+//		// Adding the List duplicatedTransactions and the transactions with balance
+//		// error to the List of allTransactions that is returned
+//		allTransactions.add(duplicatedTransactionsInFile);
+//		allTransactions.add(duplicatedTransactionsInDb);
+//		allTransactions.add(transactionsBalanceError);
+//		allTransactions.add(rawTransactions);
+//
+//		//If necessary create new accounts
+//		createNewAccounts(rawTransactions);
+//
+//		// Saving the list of transactions from the file to the database
+//		repository.saveAll(rawTransactions);
+//
+//		return allTransactions;
+//	}
+//
+//	public void createNewAccounts(List<Transaction> rawTransactions) {
+//		// Creating Account based on IBAN if it does not exist already
+//		rawTransactions.stream().filter(t -> accountRepository.findByIban(t.getAccountNumber()) == null)
+//				.forEach(transaction -> {
+//					Account newAccount = new Account(transaction.getAccountNumber(), transaction.getEndBalance());
+//					accountRepository.save(newAccount);
+//				});
+//	}
+//
+//	// Get repeated transactions from the database
+//	public List<Transaction> getTransactionsByReference(Long reference) {
+//		List<Transaction> duplicatesList = null;
+//		duplicatesList = repository.findByReference(reference);
+//		duplicatesList.addAll(repository.findByReference(reference));
+//		return duplicatesList;
+//	}
 
 	// Build response based on List of transactions
 	public Map<String, Object> getResponse(List<List<Transaction>> allTransactions, MultipartFile file,
