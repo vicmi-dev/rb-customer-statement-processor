@@ -32,9 +32,9 @@ A bank receives monthly deliveries of customer statement records. This informati
  * Import the project in your favourite IDE
  * Run the file `"src\main\java\com\manuel\rb\RbCustomerStatementProcessorApplication.java"`
  
- ## Quick run
+ ## Use
  
- * The API can be reached at http://localhost:8080/customer/api/upload
+ * The API can be reached at http://localhost:8080/api/upload
  * Upload the csv or xml files as 'files' Key in form-data POST body
  * The response will be a list/s of JSON objects including the reference number and description for each transaction with duplicated reference numbers or balance error.
  
