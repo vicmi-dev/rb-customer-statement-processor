@@ -14,6 +14,10 @@ import com.manuel.rb.models.entity.Transaction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -122,5 +126,19 @@ public class GeneratePdfReport {
 		}
 
 		return new ByteArrayInputStream(out.toByteArray());
+	}
+	
+
+
+
+	public ResponseEntity<InputStreamResource> generatePdfResponse(List<List<Transaction>> allTransactions) {
+		// PDF generation WIP
+		ByteArrayInputStream bis = GeneratePdfReport.transactionsReport(allTransactions);
+
+		var headers = new HttpHeaders();
+		headers.add("Content-Disposition", "inline; filename=transactionsreport.pdf");
+
+		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF)
+				.body(new InputStreamResource(bis));
 	}
 }

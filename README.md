@@ -13,6 +13,13 @@ A bank receives monthly deliveries of customer statement records. This informati
  * All transaction references should be unique
  * End balance needs to be validated 
  * Return a report with reference number and description of each of the failed transactions
+
+## Technology Stack
+* Spring Boot
+* Hibernate
+* H2 database
+* Java 11
+* Maven
     
 ## Quick Start
 
