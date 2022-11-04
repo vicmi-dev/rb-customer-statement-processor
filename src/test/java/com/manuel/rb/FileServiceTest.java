@@ -1,6 +1,7 @@
 package com.manuel.rb;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,6 +38,7 @@ public class FileServiceTest {
 		List<Transaction> rawTransactions = fileService.csvToTransactions(inputFile);
 
 		assertFalse(rawTransactions.isEmpty());
+		assertEquals(10, rawTransactions.size());
 	}
 
 	@Test
@@ -49,6 +51,7 @@ public class FileServiceTest {
 		List<Transaction> rawTransactions = fileService.xmlToTransactions(multipartFile);
 
 		assertFalse(rawTransactions.isEmpty());
+		assertEquals(10, rawTransactions.size());
 	}
 
 }

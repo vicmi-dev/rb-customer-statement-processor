@@ -2,6 +2,7 @@ package com.manuel.rb;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,7 +64,6 @@ public class ValidationServiceTest {
 		transactions.add(transaction3);
 	}
 
-
 	@Test
 	void findDuplicatedTransactionsInListTest() {
 		List<Transaction> duplicatedTransactions = validationService.findDuplicatedTransactionsInList(transactions);
@@ -75,9 +75,10 @@ public class ValidationServiceTest {
 	void validateBalanceTest() {
 		List<Transaction> transactionsBalanceError = validationService.validateBalance(transactions);
 
-		transactionsBalanceError.forEach(transaction ->
-		assertFalse(transaction.getStartBalance().add(transaction.getMutation())
-				.equals(transaction.getEndBalance())));
+		transactionsBalanceError.forEach(transaction -> assertNotEquals(transaction.getEndBalance(),
+				transaction.getStartBalance().add(transaction.getMutation())));
+		assertEquals(1, transactionsBalanceError.size());
+
 	}
 
 }
