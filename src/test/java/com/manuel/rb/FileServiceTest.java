@@ -7,14 +7,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +22,7 @@ import com.manuel.rb.models.entity.Transaction;
 import com.manuel.rb.services.FileService;
 
 @SpringBootTest
-public class FileServiceTest {
+class FileServiceTest {
 
 	@Autowired
 	FileService fileService;
